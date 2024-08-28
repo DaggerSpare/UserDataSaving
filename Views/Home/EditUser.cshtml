@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Kullanıcı Güncelleme</title>
+</head>
+<body>
+    @model DataIO.Models.UserData
+
+    <h2>Kullanıcı Bilgileri Güncelle</h2>
+
+    <form asp-controller="Home" asp-action="EditUser" method="post">
+        <input type="hidden" asp-for="Id" />
+        <div class="form-group">
+            <label for="FirstName">First Name:</label>
+            <input type="text" class="form-control" id="FirstName" asp-for="FirstName" />
+        </div>
+        <div class="form-group">
+            <label for="LastName">Last Name:</label>
+            <input type="text" class="form-control" id="LastName" asp-for="LastName" />
+        </div>
+        <div class="form-group">
+            <label for="TC">TC:</label>
+            <input type="text" class="form-control" id="TC" asp-for="TC" />
+        </div>
+        <button type="submit" class="btn btn-primary">Güncelle</button>
+    </form>
+    <script>
+    function updateUser() {
+    var userId = $('#userId').val();
+    var firstName = $('#editFirstName').val();
+    var lastName = $('#editLastName').val();
+    var tc = $('#editTC').val();
+
+    $.ajax({
+        url: '@Url.Action("EditUser", "Home")',
+        type: 'POST',
+        data: { Id: userId, FirstName: firstName, LastName: lastName, TC: tc },
+        success: function(response) {
+            if(response.success) {
+                alert('Kullanıcı başarıyla güncellendi.');
+                location.reload();
+            } else {
+                alert('Bir hata oluştu.');
+            }
+        }
+    });
+}
+    </script>
+</body>
+</html>

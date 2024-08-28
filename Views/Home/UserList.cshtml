@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kullanıcı Listesi</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- jQuery CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+    <h1>Kullanıcı Bilgileri Görüntüleme Ekranı</h1>
+
+    @model IEnumerable<DataIO.Models.UserData>
+
+    <div class="table-container">
+        <table class="table">
+            <thead class="table-header">
+                <tr>
+                    <th>Id</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>TC</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var userData in Model)
+                {
+                    <tr>
+                        <td>@userData.Id</td>
+                        <td>@userData.FirstName</td>
+                        <td>@userData.LastName</td>
+                        <td>@userData.TC</td>
+                        <td>
+                            <form asp-controller="Home" asp-action="DeleteUser" method="post" style="display: inline-block;">
+                                <input type="hidden" name="id" value="@userData.Id" />
+                                <button class="btn btn-danger" type="submit">
+                                    <i class="fas fa-trash-alt"></i> 
+                                </button>
+                            </form>
+                            <button type="button" class="btn btn-outline-info" onclick="location.href='@Url.Action("EditUser", "Home", new { id = userData.Id })'" style="display: inline-block;">
+                                <i class="fas fa-edit"></i> 
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <a href="@Url.Action("Index", "Home")" class="btn btn-primary">Geri Dön</a>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
+
+
+
+
+    <script>
+    function editUser(userId) {
+    $.ajax({
+        url: '@Url.Action("GetUserData", "Home")', // Sunucudaki GetUserData metodunu çağırıyoruz
+        type: 'GET',
+        data: { id: userId }, // Kullanıcı ID'sini gönderiyoruz
+        success: function(data) {
+            // Burada data değişkeni ile gelen kullanıcı bilgisini işleyebiliriz.
+            // Örneğin, bir modalın içeriğini güncelleyebilir veya bir formu doldurabiliriz.
+            $('#editFirstName').val(data.firstName);
+            $('#editLastName').val(data.lastName);
+            $('#editTC').val(data.tc);
+            $('#userId').val(data.id); // Gizli input için ID'yi ayarlıyoruz
+            $('#editModal').modal('show'); // Bootstrap modalını gösteriyoruz
+        }
+    });
+}
+    </script>
+
+
+
+
+
+</body>
+</html>
